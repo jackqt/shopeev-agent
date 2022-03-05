@@ -47,6 +47,20 @@ function resizeBuyerRatingCard() {
         e.style = "float: unset !important; width: unset !important; -webkit-box-align: unset !important; align-items: unset !important; margin: 15px 0 0 0;"
     });
 }
+function replaceProductImage() {
+    debugger;
+    document
+        .getElementsByClassName("product-item")
+        .forEach((e) => {
+            let img = e.firstChild;
+            let imgSrc = img.getAttribute("style").replace(/.*url\(\"/, "").replace(/\"\);/, "");
+            let newImgEle = document.createElement("img");
+            newImgEle.src = imgSrc;
+            newImgEle.style = "height: 60px; border: 1px solid #e8e8e8; margin-right: 10px;";
+            img.remove();
+            e.insertAdjacentElement('afterbegin', newImgEle);
+        });
+}
 function onload() {
     let mainContainer = document.getElementsByClassName("order-detail")[0];
     let leftCards = mainContainer.firstChild.firstChild.children;
@@ -65,6 +79,8 @@ function onload() {
 
     resizeBuyerInfoCard();
     resizeBuyerRatingCard();
+
+    setTimeout(replaceProductImage, 1000);
 }
 
 setTimeout(onload, 2000);
