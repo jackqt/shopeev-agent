@@ -16,6 +16,7 @@ function resizeBuyerInfoCard() {
     let right = document.getElementsByClassName("od-history")[0];
     let card = right.firstChild;
     card.className = "shopee-card";
+    card.style = "margin-bottom: 16px;";
 
     let container = card.getElementsByClassName("user-view-item")[0];
     container.style = "display: block !important";
@@ -48,7 +49,6 @@ function resizeBuyerRatingCard() {
     });
 }
 function replaceProductImage() {
-    debugger;
     document
         .getElementsByClassName("product-item")
         .forEach((e) => {
@@ -61,25 +61,57 @@ function replaceProductImage() {
             e.insertAdjacentElement('afterbegin', newImgEle);
         });
 }
-function onload() {
+function getOriginUserInfoCard() {
     let mainContainer = document.getElementsByClassName("order-detail")[0];
     let leftCards = mainContainer.firstChild.firstChild.children;
-    let buyerRatingCard = leftCards[1];
-    let buyerCard = leftCards[3];
+    let cards = Array.from(leftCards).filter(e => e.getElementsByClassName("user-view-item").length > 0);
+
+    return cards.length > 0 ? cards[0] : undefined;
+}
+function getOriginUserRatingCard() {
+    let mainContainer = document.getElementsByClassName("order-detail")[0];
+    let leftCards = mainContainer.firstChild.firstChild.children;
+    let cards = Array.from(leftCards).filter(e => e.getElementsByClassName("cod-content").length > 0);
+
+    return cards.length > 0 ? cards[0] : undefined;
+}
+function removeLeftUserInfoCard() {
+    let mainContainer = document.getElementsByClassName("order-detail")[0];
+    let leftCards = mainContainer.firstChild.firstChild.children;
+    let buyerCard = getOriginUserInfoCard()
+    if (buyerCard === undefined) {
+      return undefined;
+    }
     let buyerCardHTML = buyerCard.innerHTML;
     buyerCard.remove();
-
+    return buyerCard;
+}
+function removeLeftUserRatingCard() {
+    let mainContainer = document.getElementsByClassName("order-detail")[0];
+    let leftCards = mainContainer.firstChild.firstChild.children;
+    let buyerRatingCard = getOriginUserRatingCard();
+    if (buyerRatingCard === undefined) {
+      return undefined;
+    }
     let buyerRatingCardHTML = buyerRatingCard.innerHTML;
-    buyerRatingCard.remove()
-
-
+    buyerRatingCard.remove();
+    console.log(buyerRatingCard);
+    return buyerRatingCard;
+}
+function onload() {
     let right = document.getElementsByClassName("od-history")[0];
+    let buyerCard = removeLeftUserInfoCard();
+    if (buyerCard === undefined) {
+        return;
+    }
     let rightBuyerInfoCard = right.insertAdjacentElement('afterbegin', buyerCard);
-    let rightBuyerRatingCard = rightBuyerInfoCard.insertAdjacentElement('afterend', buyerRatingCard);
-
     resizeBuyerInfoCard();
-    resizeBuyerRatingCard();
 
+    let buyerRatingCard = removeLeftUserRatingCard();
+    if (buyerRatingCard !== undefined) {
+        let rightBuyerRatingCard = rightBuyerInfoCard.insertAdjacentElement('afterend', buyerRatingCard);
+        resizeBuyerRatingCard();
+    }
     setTimeout(replaceProductImage, 1000);
 }
 
