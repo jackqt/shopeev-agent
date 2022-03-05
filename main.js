@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Shopeev-Agent
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/jackqt/shopeev-agent
 // @version      0.1
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
