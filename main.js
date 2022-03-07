@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopeev-Agent
 // @namespace    https://github.com/jackqt/shopeev-agent
-// @version      0.2
+// @version      0.3
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
 // @match        https://seller.shopee.cn/portal/sale/shipment*
@@ -19,7 +19,7 @@ const SIDEBAR_MENU_NAME = '订单列表';
 
     async function setClipboard() {
         let container = document.getElementById("exportContainer");
-        let text = container.childNodes[0].textContent;
+        let text = container.childNodes[0].value;
         try {
             await navigator.clipboard.writeText(text);
             alert("Save to Clipboard");
@@ -60,9 +60,9 @@ const SIDEBAR_MENU_NAME = '订单列表';
         let contentContainer = document.createElement("div");
         contentContainer.style = "height: 400px;"
         contentContainer.id = "exportContainer";
-        let dialogContent = document.createElement("span");
-        dialogContent.style = "white-space: break-spaces;"
-        dialogContent.textContent = text;
+        let dialogContent = document.createElement("textarea");
+        dialogContent.style = "white-space: break-spaces; height: 95%; width: 100%;"
+        dialogContent.value = text;
         contentContainer.append(dialogContent);
         dialogEle.append(contentContainer);
 
