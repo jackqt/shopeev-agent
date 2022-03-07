@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopeev-Agent
 // @namespace    https://github.com/jackqt/shopeev-agent
-// @version      0.4
+// @version      0.5
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
 // @match        https://seller.shopee.cn/portal/sale/shipment*
@@ -11,11 +11,12 @@
 
 const SIDEBAR_MENU_ID = 'orderList';
 const SIDEBAR_MENU_NAME = '订单列表';
+const URL_REGEX = /https.*\/portal\/sale\/shipment.*toship.*to_process/;
 
 (function() {
     'use strict';
     let btnCheckingTimeout = undefined;
-    let currentURL = undefined;
+    let savedURL = undefined;
 
     async function setClipboard() {
         let container = document.getElementById("exportContainer");
@@ -133,16 +134,41 @@ const SIDEBAR_MENU_NAME = '订单列表';
         let btnGroup = root[0];
         btnGroup.appendChild(btn);
     }
-    function main() {
-        if (currentURL === undefined || currentURL !== window.location.href) {
-            console.log("Init Button: Export Order");
-            initExportButton();
-            currentURL = window.location.href;
+    function destroyExportButton() {
+        let btn = document.getElementById("exportData");
+        if (btn) {
+            btn.remove();
         }
-
-        clearTimeout(btnCheckingTimeout);
-        btnCheckingTimeout = setTimeout(main, 5000);
     }
-    btnCheckingTimeout = setTimeout(main, 5000);
+    function isToshipPage(url) {
+        return URL_REGEX.test(url);
+    }
+    function isDataReady() {
+        let itemContainer = document.getElementsByClassName("shipemnt-list-item-container");
+        if (itemContainer && itemContainer.length > 0 && itemContainer[0].childNodes.length >= 1) {
+            console.debug("Order Data loaded");
+            return true;
+        }
+        console.debug("Order Data not ready");
+        return false;
+    }
+    function main() {
+        clearTimeout(btnCheckingTimeout);
+        btnCheckingTimeout = setTimeout(main, 1000);
+
+        let pageUrl = window.location.href;
+        if (!isToshipPage(pageUrl)) {
+            console.debug("Skip, page is not toship state");
+            destroyExportButton();
+            savedURL = undefined;
+        } else if (isDataReady()){
+            if (savedURL === undefined || savedURL !== pageUrl) {
+                console.log("Init Button: Export Order");
+                initExportButton();
+                savedURL = window.location.href;
+            }
+        }
+    }
+    btnCheckingTimeout = setTimeout(main, 1000);
 })();
 
