@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopeev-Agent
 // @namespace    https://github.com/jackqt/shopeev-agent
-// @version      0.1
+// @version      0.2
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
 // @match        https://seller.shopee.cn/portal/sale/shipment*
@@ -14,6 +14,9 @@ const SIDEBAR_MENU_NAME = '订单列表';
 
 (function() {
     'use strict';
+    let btnCheckingTimeout = undefined;
+    let currentURL = undefined;
+
     async function setClipboard() {
         let container = document.getElementById("exportContainer");
         let text = container.childNodes[0].textContent;
@@ -126,7 +129,15 @@ const SIDEBAR_MENU_NAME = '订单列表';
         btnGroup.appendChild(btn);
     }
     function main() {
-        initExportButton();
+        if (currentURL === undefined || currentURL !== window.location.href) {
+            console.log("Init Button: Export Order");
+            initExportButton();
+            currentURL = window.location.href;
+        }
+
+        clearTimeout(btnCheckingTimeout);
+        btnCheckingTimeout = setTimeout(main, 5000);
     }
-    setTimeout(main, 5000);
+    btnCheckingTimeout = setTimeout(main, 5000);
 })();
+
