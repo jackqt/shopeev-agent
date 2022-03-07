@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopeev-Agent
 // @namespace    https://github.com/jackqt/shopeev-agent
-// @version      0.3
+// @version      0.4
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
 // @match        https://seller.shopee.cn/portal/sale/shipment*
@@ -56,6 +56,11 @@ const SIDEBAR_MENU_NAME = '订单列表';
         let dialogEle = document.createElement("div");
         dialogEle.id = "exportDialog";
         dialogEle.style = "position: absolute; z-index: 999; width: 80%; height: 500px; top: 100px; left: 100px; background-color: #fff; border: 1px solid gray; border-radius: 5px; padding: 20px;";
+
+        let header = document.createElement("div");
+        header.style = "line-height: 24px; margin-bottom: 8px; font-size: 22px; font-weight: 500; font-weight: var(--font-weight);";
+        header.textContent = "Export Data";
+        dialogEle.append(header);
 
         let contentContainer = document.createElement("div");
         contentContainer.style = "height: 400px;"
