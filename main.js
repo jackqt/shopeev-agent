@@ -4,7 +4,7 @@
 // @version      0.5
 // @description  Agent run in shopee admin console to collect data
 // @author       Jack Qingtian<jack.coder@outlook.com>
-// @match        https://seller.shopee.cn/portal/sale/shipment*
+// @match        https://seller.shopee.cn/*
 // @icon         https://www.google.com/s2/favicons?domain=shopee.cn
 // @grant        none
 // ==/UserScript==
